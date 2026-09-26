@@ -10,6 +10,7 @@ type OrderService interface {
 	CreateOrder(input *repository.CreateOrderInput) (*models.Order, error)
 	GetOrderByID(id uint) (*models.Order, error)
 	GetAllOrders() ([]models.Order, error)
+	UpdateOrderStatus(id uint, status models.OrderStatus) (*models.Order, error)
 }
 
 type orderService struct {
@@ -36,4 +37,13 @@ func (s *orderService) GetOrderByID(id uint) (*models.Order, error) {
 
 func (s *orderService) GetAllOrders() ([]models.Order, error) {
 	return s.repo.GetAll()
+}
+func (s *orderService) UpdateOrderStatus(id uint, status models.OrderStatus) (*models.Order, error) {
+	order, err := s.repo.GetByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	order.Status = status
+	return s.repo.UpdateOrderStatus(id, status)
 }

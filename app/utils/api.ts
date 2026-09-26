@@ -35,6 +35,22 @@ export const orderApi = {
     });
     return res.data;
   },
+
+  async getAll(): Promise<Order[]> {
+    const res = await request<ApiResponse<Order[]>>('/orders');
+    return res.data;
+  },
+  async getById(id: number): Promise<Order> {
+    const res = await request<ApiResponse<Order>>(`/orders/${id}`);
+    return res.data;
+  },
+  async updateStatus(id: number, status: 'pending' | 'completed' | 'cancelled'): Promise<Order> {
+    const res = await request<ApiResponse<Order>>(`/orders/${id}/status`, {
+      method: 'PUT',
+      body: JSON.stringify({ status }),
+    });
+    return res.data;
+  },
 };
 // --- Domain Models ---
 export interface ProductImage {

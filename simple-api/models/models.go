@@ -1,6 +1,10 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"fmt"
+
+	"gorm.io/gorm"
+)
 
 type OrderStatus string
 
@@ -9,6 +13,24 @@ const (
 	StatusCompleted OrderStatus = "completed"
 	StatusCancelled OrderStatus = "cancelled"
 )
+
+func (s OrderStatus) IsValid() bool {
+	switch s {
+	case StatusPending, StatusCompleted, StatusCancelled:
+		return true
+	default:
+		return false
+	}
+}
+
+// ParseOrderStatus converts a raw string into a validated OrderStatus
+func ParseOrderStatus(raw string) (OrderStatus, error) {
+	status := OrderStatus(raw)
+	if !status.IsValid() {
+		return "", fmt.Errorf("invalid order status '%s': must be pending, completed, or cancelled", raw)
+	}
+	return status, nil
+}
 
 type Order struct {
 	gorm.Model
