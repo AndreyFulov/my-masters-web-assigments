@@ -12,6 +12,7 @@ export const CreateProductForm: React.FC<CreateProductFormProps> = ({
   onCancel,
 }) => {
   // Form values
+  const [isVisible, setIsVisible] = useState(true);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
@@ -100,6 +101,7 @@ export const CreateProductForm: React.FC<CreateProductFormProps> = ({
         description: description.trim(),
         price: parsedPrice,
         stock: parsedStock,
+        visible: isVisible
       });
 
       // 2. Upload all selected images sequentially
@@ -113,12 +115,14 @@ export const CreateProductForm: React.FC<CreateProductFormProps> = ({
       }
 
       setStatusMessage('Товар успешно создан!');
+      console.log('Created Product:', createdProduct, "and visible was", isVisible);
 
       // Reset form
       setName('');
       setDescription('');
       setPrice('');
       setStock('');
+      setIsVisible(true);
       setSelectedFiles([]);
       previews.forEach((url) => URL.revokeObjectURL(url));
       setPreviews([]);
@@ -184,7 +188,7 @@ export const CreateProductForm: React.FC<CreateProductFormProps> = ({
         </div>
 
         {/* Price & Stock Grid */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700">
               Цена (₽) *
@@ -217,7 +221,19 @@ export const CreateProductForm: React.FC<CreateProductFormProps> = ({
             />
           </div>
         </div>
-
+        {/* Visibility Toggle */}
+        <label className="flex items-center justify-between cursor-pointer rounded-lg border border-gray-200 dark:border-white/10 p-3 transition hover:bg-gray-50 dark:hover:bg-white/5">
+  <span className="text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300">
+    Отображать в каталоге
+  </span>
+  <input
+    type="checkbox"
+    checked={isVisible}
+    onClick={(e) => e.stopPropagation()} // Stop double trigger
+    onChange={(e) => setIsVisible(e.target.checked)}
+    className="h-5 w-5 rounded border-gray-300 text-marine focus:ring-marine dark:border-gray-600 dark:bg-gray-800"
+  />
+</label>
         {/* Image Drag and Drop Zone */}
         <div>
           <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700">
