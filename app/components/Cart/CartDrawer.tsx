@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useCart } from '../../context/CartContext';
 import { orderApi, productApi, ApiError } from '../../utils/api';
+import { trackAction } from '@/app/utils/tracker';
 
 // --- Phone Masking & Validation Helpers ---
 const normalizePhone = (value: string): string => {
@@ -99,6 +100,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
         })),
       });
 
+      trackAction('place_order', {
+    order_id: newOrder.ID,
+    total_amount: newOrder.total_amount,
+    item_count: cart.length,
+    phone: normalizedPhone,
+  });
       setOrderSuccessId(newOrder.ID);
       clearCart();
     } catch (err: unknown) {

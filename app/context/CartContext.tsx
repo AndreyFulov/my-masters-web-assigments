@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Product } from '../utils/api';
+import { trackAction } from '../utils/tracker';
 
 export interface CartItem {
   product: Product;
@@ -41,6 +42,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [cart, isHydrated]);
 
   const addToCart = (product: Product, quantity = 1) => {
+    trackAction('add_to_cart', {
+    product_id: product.ID,
+    product_name: product.name,
+    price: product.price,
+    quantity,
+  });
     setCart((prev) => {
       const existing = prev.find((item) => item.product.ID === product.ID);
       if (existing) {
@@ -54,6 +61,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const removeFromCart = (productId: number) => {
+    const item = cart.find((i) => i.product.ID === productId);
+    trackAction('remove_from_cart', {
+    product_id: productId,
+    product_name: item?.product.name,
+    quantity_removed: item?.quantity,
+  });
     setCart((prev) => prev.filter((item) => item.product.ID !== productId));
   };
 

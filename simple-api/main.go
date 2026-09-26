@@ -33,11 +33,14 @@ func main() {
 	orderService := service.NewOrderService(orderRepo)
 	orderHandler := handler.NewOrderHandler(orderService)
 
+	actionLogger := service.NewActionLogger("actions.log")
+	actionHandler := handler.NewActionHandler(actionLogger)
+
 	app := fiber.New()
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"http://localhost:5173", "http://localhost:3000"}, // Your frontend URL
 		AllowHeaders: []string{"Origin", "Content-Type", "Accept", "Authorization"},
-		AllowMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "OPTIONS"},
 	}))
 	app.Use(logger.New())
 
@@ -47,5 +50,6 @@ func main() {
 	api := app.Group("/api/v1")
 	productHandler.RegisterRoutes(api)
 	orderHandler.RegisterRoutes(api)
+	actionHandler.RegisterRoutes(api)
 	log.Fatal(app.Listen(":3001"))
 }
