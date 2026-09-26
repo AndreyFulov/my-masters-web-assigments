@@ -2,6 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { Product, productApi } from '../../utils/api';
 import Link from 'next/link';
+import { useCart } from '@/app/context/CartContext';
 
 interface ProductCardProps {
   product: Product;
@@ -19,6 +20,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const {addToCart} = useCart();
 
   const images = product.images || [];
   const currentImage = images[selectedImageIndex];
@@ -178,7 +180,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <button
               type="button"
               disabled={isOutOfStock}
-              onClick={() => onAddToCart?.(product)}
+              onClick={() => addToCart(product)}
               className="flex-1 rounded-lg bg-marine px-3 py-2 text-center text-xs font-semibold text-white transition hover:bg-marine-600 dark:hover:bg-marine-700 disabled:cursor-not-allowed disabled:bg-gray-200 dark:disabled:bg-gray-700 disabled:text-gray-400"
             >
               В корзину

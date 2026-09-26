@@ -1,3 +1,41 @@
+export interface OrderItemInput {
+  product_id: number;
+  quantity: number;
+}
+
+export interface CreateOrderInput {
+  customer_name: string;
+  customer_email?: string;
+  customer_phone: string;
+  items: OrderItemInput[];
+}
+
+export interface Order {
+  ID: number;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
+  total_amount: number;
+  status: 'pending' | 'completed' | 'cancelled';
+  items: {
+    ID: number;
+    product_id: number;
+    product: Product;
+    quantity: number;
+    price: number;
+  }[];
+}
+
+// Add to your productApi or export as orderApi:
+export const orderApi = {
+  async create(input: CreateOrderInput): Promise<Order> {
+    const res = await request<ApiResponse<Order>>('/orders', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    });
+    return res.data;
+  },
+};
 // --- Domain Models ---
 export interface ProductImage {
   ID: number;
