@@ -16,8 +16,22 @@ func NewActionHandler(logger *service.ActionLogger) *ActionHandler {
 
 func (h *ActionHandler) RegisterRoutes(router fiber.Router) {
 	router.Post("/actions/log", h.LogAction)
+	router.Get("/actions/logs", h.GetLogs)
 }
+func (h *ActionHandler) GetLogs(c fiber.Ctx) error {
+	limit := fiber.Query[int](c, "limit", 100) // Default last 100 entries
 
+	logs, err := h.logger.GetLogs(limit)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to read logs",
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"data": logs,
+	})
+}
 func (h *ActionHandler) LogAction(c fiber.Ctx) error {
 	var input struct {
 		Action  string                 `json:"action"`

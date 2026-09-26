@@ -1,6 +1,7 @@
 package service
 
 import (
+	"bufio"
 	"encoding/json"
 	"os"
 	"sync"
@@ -50,4 +51,45 @@ func (l *ActionLogger) Log(action string, ip string, payload map[string]interfac
 	data = append(data, '\n')
 	_, err = f.Write(data)
 	return err
+}
+func (l *ActionLogger) GetLogs(limit int) ([]UserAction, error) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	file, err := os.Open(l.filePath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return []UserAction{}, nil
+		}
+		return nil, err
+	}
+	defer file.Close()
+
+	var logs []UserAction
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Bytes()
+		if len(line) == 0 {
+			continue
+		}
+		var entry UserAction
+		if err := json.Unmarshal(line, &entry); err == nil {
+			logs = append(logs, entry)
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
+
+	// Reverse to show newest logs first
+	for i, j := 0, len(logs)-1; i < j; i, j = i+1, j-1 {
+		logs[i], logs[j] = logs[j], logs[i]
+	}
+
+	if limit > 0 && len(logs) > limit {
+		logs = logs[:limit]
+	}
+
+	return logs, nil
 }

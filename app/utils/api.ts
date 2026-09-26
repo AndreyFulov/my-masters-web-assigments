@@ -135,6 +135,21 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
   return data as T;
 }
 
+// --- Log API Functions ---
+export interface UserActionLog {
+  timestamp: string;
+  action: 'add_to_cart' | 'remove_from_cart' | 'place_order' | string;
+  user_ip: string;
+  payload: Record<string, any>;
+}
+
+export const actionApi = {
+  async getLogs(limit = 100): Promise<UserActionLog[]> {
+    const res = await request<ApiResponse<UserActionLog[]>>(`/actions/logs?limit=${limit}`);
+    return res.data;
+  },
+};
+
 // --- Product API Functions ---
 
 export const productApi = {
