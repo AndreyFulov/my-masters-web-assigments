@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Product, productApi, ApiError } from '../../utils/api';
+import { useCart } from '@/app/context/CartContext';
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -16,7 +17,8 @@ export default function ProductDetailPage() {
   const [isUploading, setIsUploading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
+  
+  const {addToCart} = useCart();
   const productId = Number(params?.id);
 
   // Fetch product data
@@ -277,7 +279,7 @@ export default function ProductDetailPage() {
             <button
               type="button"
               disabled={isOutOfStock}
-              onClick={() => alert(`Товар "${product.name}" добавлен в корзину!`)}
+              onClick={() => addToCart(product)}
               className="w-full rounded-lg bg-marine px-6 py-3 text-center text-sm font-semibold text-white transition hover:bg-marine-600 dark:hover:bg-marine-700 disabled:cursor-not-allowed disabled:bg-gray-200 dark:disabled:bg-gray-700 disabled:text-gray-400"
             >
               В корзину

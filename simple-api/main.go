@@ -23,11 +23,15 @@ func main() {
 	}
 
 	// Auto-migrate both models
-	db.AutoMigrate(&models.Product{}, &models.ProductImage{})
+	db.AutoMigrate(&models.Product{}, &models.ProductImage{}, &models.Order{}, &models.OrderItem{})
 
 	productRepo := repository.NewProductRepository(db)
 	productService := service.NewProductService(productRepo)
 	productHandler := handler.NewProductHandler(productService)
+
+	orderRepo := repository.NewOrderRepository(db)
+	orderService := service.NewOrderService(orderRepo)
+	orderHandler := handler.NewOrderHandler(orderService)
 
 	app := fiber.New()
 	app.Use(cors.New(cors.Config{
@@ -42,6 +46,6 @@ func main() {
 
 	api := app.Group("/api/v1")
 	productHandler.RegisterRoutes(api)
-
+	orderHandler.RegisterRoutes(api)
 	log.Fatal(app.Listen(":3001"))
 }
