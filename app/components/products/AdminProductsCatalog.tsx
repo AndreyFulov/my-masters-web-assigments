@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { ProductCard } from './ProductCard';
 import { Product, productApi } from "../../utils/api";
+import { CreateProductForm } from './CreateProductForm';
 
 export default function AdminProductsCatalog() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -25,10 +26,23 @@ export default function AdminProductsCatalog() {
       alert('Не удалось удалить товар. Пожалуйста, попробуйте снова.');
     }
   };
-
+const [showModal, setShowModal] = useState(false);
+    
+      const handleProductCreated = (product: Product) => {
+        alert(`Товар "${product.name}" создан с ${product.images?.length || 0} картинками!`);
+        setShowModal(false);
+      };
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
-      <h1 className="mb-6 text-2xl font-bold tracking-tight">Каталог</h1>
+      <div className="grid grid-cols-3">
+      <h1 className="mb-6 text-2xl font-bold tracking-tight col-span-2">Каталог</h1>
+      <button
+              onClick={() => setShowModal(true)}
+              className="rounded-lg bg-marine px-4 py-2 text-sm font-semibold text-white hover:bg-marine-700 m-5"
+            >
+              + Добавить товар
+            </button>
+            </div>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {products.map((product) => (
           <ProductCard
@@ -39,6 +53,16 @@ export default function AdminProductsCatalog() {
             onAddToCart={(p) => alert(`Товар ${p.name} добавлен в корзину!`)}
           />
         ))}
+        {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-2xl">
+            <CreateProductForm
+              onSuccess={handleProductCreated}
+              onCancel={() => setShowModal(false)}
+            />
+          </div>
+        </div>
+      )}
       </div>
     </div>
   );

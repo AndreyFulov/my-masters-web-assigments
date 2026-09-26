@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+	"shop-simple-api/models"
 	"shop-simple-api/repository"
 	"shop-simple-api/service"
 
@@ -22,6 +23,7 @@ func (h *OrderHandler) RegisterRoutes(router fiber.Router) {
 	orders.Post("/", h.CreateOrder)
 	orders.Get("/", h.GetAllOrders)
 	orders.Get("/:id", h.GetOrderByID)
+	orders.Put("/:id/status", h.UpdateOrderStatus)
 }
 
 func (h *OrderHandler) CreateOrder(c fiber.Ctx) error {
@@ -65,4 +67,37 @@ func (h *OrderHandler) GetOrderByID(c fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{"data": order})
+}
+
+func (h *OrderHandler) UpdateOrderStatus(c fiber.Ctx) error {
+	id := fiber.Params[uint](c, "id", 0)
+	if id == 0 {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid order ID"})
+	}
+
+	var input struct {
+		Status string `json:"status"`
+	}
+
+	// Fiber v3: c.Bind().Body(&input) | Fiber v2: c.BodyParser(&input)
+	if err := c.Bind().Body(&input); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
+	}
+
+	// Parse and validate the status
+	orderStatus, err := models.ParseOrderStatus(input.Status)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	// Pass the typed orderStatus to your service
+	updatedOrder, err := h.service.UpdateOrderStatus(id, orderStatus)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Order status updated successfully",
+		"data":    updatedOrder,
+	})
 }

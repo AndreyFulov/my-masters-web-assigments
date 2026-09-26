@@ -26,6 +26,7 @@ type OrderRepository interface {
 	CreateOrder(input *CreateOrderInput) (*models.Order, error)
 	GetByID(id uint) (*models.Order, error)
 	GetAll() ([]models.Order, error)
+	UpdateOrderStatus(id uint, status models.OrderStatus) (*models.Order, error)
 }
 
 type orderRepository struct {
@@ -115,4 +116,17 @@ func (r *orderRepository) GetAll() ([]models.Order, error) {
 		return nil, err
 	}
 	return orders, nil
+}
+func (r *orderRepository) UpdateOrderStatus(id uint, status models.OrderStatus) (*models.Order, error) {
+	var order models.Order
+	if err := r.db.First(&order, id).Error; err != nil {
+		return nil, err
+	}
+
+	order.Status = status
+	if err := r.db.Save(&order).Error; err != nil {
+		return nil, err
+	}
+
+	return &order, nil
 }
