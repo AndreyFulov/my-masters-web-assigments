@@ -1,15 +1,89 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Base Brand Colors */
+  --color-marine: #246EB9;
+  --color-green: #4cb944;
+  --color-custard: #F5EE9E;
+  --color-tomato: #F06543;
+  --color-white: #FDFFFC;
+
+  /* Marine Scale (50 = Lightest, 900 = Darkest) */
+  --color-marine-50:  color-mix(in oklab, var(--color-marine) 10%, white);
+  --color-marine-100: color-mix(in oklab, var(--color-marine) 25%, white);
+  --color-marine-200: color-mix(in oklab, var(--color-marine) 40%, white);
+  --color-marine-300: color-mix(in oklab, var(--color-marine) 60%, white);
+  --color-marine-400: color-mix(in oklab, var(--color-marine) 80%, white);
+  --color-marine-500: var(--color-marine); /* Base */
+  --color-marine-600: color-mix(in oklab, var(--color-marine) 85%, black);
+  --color-marine-700: color-mix(in oklab, var(--color-marine) 70%, black);
+  --color-marine-800: color-mix(in oklab, var(--color-marine) 50%, black);
+  --color-marine-900: color-mix(in oklab, var(--color-marine) 30%, black);
+
+  /* Green Scale */
+  --color-green-100: color-mix(in oklab, var(--color-green) 25%, white);
+  --color-green-300: color-mix(in oklab, var(--color-green) 60%, white);
+  --color-green-500: var(--color-green); /* Base */
+  --color-green-700: color-mix(in oklab, var(--color-green) 70%, black);
+  --color-green-900: color-mix(in oklab, var(--color-green) 30%, black);
+
+  /* Tomato Scale */
+  --color-tomato-100: color-mix(in oklab, var(--color-tomato) 25%, white);
+  --color-tomato-300: color-mix(in oklab, var(--color-tomato) 60%, white);
+  --color-tomato-500: var(--color-tomato); /* Base */
+  --color-tomato-700: color-mix(in oklab, var(--color-tomato) 70%, black);
+  --color-tomato-900: color-mix(in oklab, var(--color-tomato) 30%, black);
+
+  /* Custard Scale (Already light, mainly needs shades) */
+  --color-custard-100: color-mix(in oklab, var(--color-custard) 40%, white);
+  --color-custard-300: color-mix(in oklab, var(--color-custard) 75%, white);
+  --color-custard-500: var(--color-custard); /* Base */
+  --color-custard-700: color-mix(in oklab, var(--color-custard) 65%, black);
+  --color-custard-900: color-mix(in oklab, var(--color-custard) 35%, black);
 }
 
 @theme inline {
-  --color-background: var(--background);
+  --color-background: var(--white);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-marine: #246EB9;
+  --color-green: #4cb944;
+  --color-white: #FDFFFC;
+  --color-custard: #F5EE9E;
+  --color-tomato:#F06543;
+  /* Marine Scale (50 = Lightest, 900 = Darkest) */
+  --color-marine-50:  color-mix(in oklab, var(--color-marine) 10%, white);
+  --color-marine-100: color-mix(in oklab, var(--color-marine) 25%, white);
+  --color-marine-200: color-mix(in oklab, var(--color-marine) 40%, white);
+  --color-marine-300: color-mix(in oklab, var(--color-marine) 60%, white);
+  --color-marine-400: color-mix(in oklab, var(--color-marine) 80%, white);
+  --color-marine-500: var(--color-marine); /* Base */
+  --color-marine-600: color-mix(in oklab, var(--color-marine) 85%, black);
+  --color-marine-700: color-mix(in oklab, var(--color-marine) 70%, black);
+  --color-marine-800: color-mix(in oklab, var(--color-marine) 50%, black);
+  --color-marine-900: color-mix(in oklab, var(--color-marine) 30%, black);
+
+  /* Green Scale */
+  --color-green-100: color-mix(in oklab, var(--color-green) 25%, white);
+  --color-green-300: color-mix(in oklab, var(--color-green) 60%, white);
+  --color-green-500: var(--color-green); /* Base */
+  --color-green-700: color-mix(in oklab, var(--color-green) 70%, black);
+  --color-green-900: color-mix(in oklab, var(--color-green) 30%, black);
+
+  /* Tomato Scale */
+  --color-tomato-100: color-mix(in oklab, var(--color-tomato) 25%, white);
+  --color-tomato-300: color-mix(in oklab, var(--color-tomato) 60%, white);
+  --color-tomato-500: var(--color-tomato); /* Base */
+  --color-tomato-700: color-mix(in oklab, var(--color-tomato) 70%, black);
+  --color-tomato-900: color-mix(in oklab, var(--color-tomato) 30%, black);
+
+  /* Custard Scale (Already light, mainly needs shades) */
+  --color-custard-100: color-mix(in oklab, var(--color-custard) 40%, white);
+  --color-custard-300: color-mix(in oklab, var(--color-custard) 75%, white);
+  --color-custard-500: var(--color-custard); /* Base */
+  --color-custard-700: color-mix(in oklab, var(--color-custard) 65%, black);
+  --color-custard-900: color-mix(in oklab, var(--color-custard) 35%, black);
 }
 
 @media (prefers-color-scheme: dark) {
