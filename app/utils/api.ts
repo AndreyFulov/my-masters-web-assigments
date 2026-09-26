@@ -56,6 +56,7 @@ export interface Product {
   price: number;
   stock: number;
   images?: ProductImage[];
+  visible: boolean;
 }
 
 // DTOs for request payloads
@@ -64,6 +65,7 @@ export interface CreateProductInput {
   description: string;
   price: number;
   stock: number;
+  visible: boolean;
 }
 
 export type UpdateProductInput = Partial<CreateProductInput>;
@@ -125,6 +127,10 @@ export const productApi = {
    */
   async getAll(): Promise<Product[]> {
     const res = await request<ApiResponse<Product[]>>('/products');
+    return res.data;
+  },
+  async getAllAndInvisible(): Promise<Product[]> {
+    const res = await request<ApiResponse<Product[]>>('/products/?alsoInvisible=true');
     return res.data;
   },
 

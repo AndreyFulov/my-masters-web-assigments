@@ -36,6 +36,7 @@ type Product struct {
 	Price       float64        `json:"price"`
 	Stock       int            `json:"stock"`
 	Images      []ProductImage `json:"images" gorm:"foreignKey:ProductID;constraint:OnDelete:CASCADE"`
+	Visible     *bool          `json:"visible" gorm:"default:true"`
 }
 
 type ProductImage struct {

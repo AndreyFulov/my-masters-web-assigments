@@ -59,7 +59,8 @@ func (h *ProductHandler) CreateProduct(c fiber.Ctx) error {
 
 // GET /products
 func (h *ProductHandler) GetAllProducts(c fiber.Ctx) error {
-	products, err := h.service.GetAllProducts()
+	alsoInvisible := fiber.Query(c, "alsoInvisible", false)
+	products, err := h.service.GetAllProducts(alsoInvisible)
 	if err != nil {
 		return h.handleError(c, err)
 	}

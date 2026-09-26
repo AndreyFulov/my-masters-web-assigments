@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { ProductCard } from './ProductCard';
 import { Product, productApi } from "../../utils/api";
 
-export default function ProductCatalog() {
+export default function AdminProductsCatalog() {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    productApi.getAll().then(setProducts).catch(console.error);
+    productApi.getAllAndInvisible().then(setProducts).catch(console.error);
   }, []);
 
   const handleProductUpdated = (updatedProduct: Product) => {

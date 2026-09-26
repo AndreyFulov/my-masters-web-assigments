@@ -14,7 +14,7 @@ var (
 type ProductService interface {
 	CreateProduct(product *models.Product) (*models.Product, error)
 	GetProductByID(id uint) (*models.Product, error)
-	GetAllProducts() ([]models.Product, error)
+	GetAllProducts(alsoInvisible bool) ([]models.Product, error)
 	UpdateProduct(id uint, product *models.Product) (*models.Product, error)
 	DeleteProduct(id uint) error
 	AddProductImage(productID uint, imageURL string) (*models.ProductImage, error)
@@ -51,8 +51,12 @@ func (s *productService) GetProductByID(id uint) (*models.Product, error) {
 	return product, nil
 }
 
-func (s *productService) GetAllProducts() ([]models.Product, error) {
-	return s.repo.GetAll()
+func (s *productService) GetAllProducts(alsoInvisible bool) ([]models.Product, error) {
+	if alsoInvisible {
+		return s.repo.GetAll()
+	} else {
+		return s.repo.GetVisible()
+	}
 }
 
 func (s *productService) UpdateProduct(id uint, updatedData *models.Product) (*models.Product, error) {
