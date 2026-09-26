@@ -36,7 +36,7 @@ export default function ProductCatalog() {
             product={product}
             onProductUpdated={handleProductUpdated}
             onDelete={handleDelete}
-            onAddToCart={(p) => alert(`Added ${p.name} to cart!`)}
+            onAddToCart={(p) => alert(`Товар ${p.name} добавлен в корзину!`)}
           />
         ))}
       </div>
