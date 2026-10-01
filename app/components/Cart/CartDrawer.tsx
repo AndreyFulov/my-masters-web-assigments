@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useCart } from '../../context/CartContext';
 import { orderApi, productApi, ApiError } from '../../utils/api';
 import { trackAction } from '@/app/utils/tracker';
+import AddToCartAlert from '../alers/AddToCartAlert';
 
 // --- Phone Masking & Validation Helpers ---
 const normalizePhone = (value: string): string => {
@@ -61,6 +62,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderSuccessId, setOrderSuccessId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [alertVisible, setAlertVision] = useState(false);
 
   if (!isOpen) return null;
 
@@ -85,6 +87,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
       return;
     }
     setPhoneError(null);
+
 
     try {
       setIsSubmitting(true);
@@ -117,6 +120,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
     } finally {
       setIsSubmitting(false);
     }
+    setAlertVision(true);
   };
 
   return (

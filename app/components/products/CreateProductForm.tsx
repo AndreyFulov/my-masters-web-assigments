@@ -90,6 +90,11 @@ export const CreateProductForm: React.FC<CreateProductFormProps> = ({
       setError('Напишите корректное количество на складе.');
       return;
     }
+    if(selectedFiles.length <= 0) {
+      setError('Прикрепите фотографии');
+      return;
+    }
+    console.log(selectedFiles.length);
 
     try {
       setIsLoading(true);

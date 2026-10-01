@@ -21,7 +21,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const {addToCart} = useCart();
-
+  const [alertVisible, setAlertVisible] = useState(false);
   const images = product.images || [];
   const currentImage = images[selectedImageIndex];
 
